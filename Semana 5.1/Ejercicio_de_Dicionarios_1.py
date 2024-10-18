@@ -1,4 +1,4 @@
-habitaciones_list: ['Habitacion 1, Piso: 1, Precio: $100"]
+habitaciones_list= ['Habitacion 1, Piso: 1, Precio: $100']
 
 diccionario_hotel= {
     "nombre":"Hotel Noche Estrellada",

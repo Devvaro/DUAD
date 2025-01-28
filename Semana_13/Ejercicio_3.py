@@ -19,17 +19,22 @@ class User:
             )
         )
 
-def user_adult(user):
-    if user.age < 18:
-        raise ValueError(f"The user is not over 18 years old")
-    
+def user_adult(func):
+    def wrapper(user, *args):
+        if user.age < 18:
+            raise ValueError(f"The user is not over 18 years old")
+        return func(user, *args)
+    return wrapper
 
 
-
-my_user = User(date(2008,9,8))
-print(f"Age: {my_user.age}")
+@user_adult
+def check_user(user):
+    print(f"Age: {my_user.age}")
+    print("The user is an adult")
 
 try:
-    user_adult(my_user)
+    my_user= User(date(2008,9,8))
+    check_user(my_user)
+    
 except ValueError as e:
     print(e)

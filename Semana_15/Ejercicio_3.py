@@ -19,6 +19,6 @@ def bubble_sort(list_to_sort):
 
 
 test_list = [3, 4, 8 , 6, 7, 10] #0(1)
-bubble_sort(test_list) #0(1)
+bubble_sort(test_list) #O(log n)
 
 print(test_list) #0(1)

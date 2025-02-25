@@ -3,10 +3,10 @@ from Ejercicio_de_funciones_6 import sort_list
 
 def test_sort_list_should_not_work_with_numbers():
     #arrange
-    list=[6,2,3,4,5]
+    number_list=[6,2,3,4,5]
     #act
-    pytest.raises(IndexError)
-    sort_list(list)
+    with pytest.raises(ValueError):
+        result=sort_list(number_list)
     #assert
     assert True
 

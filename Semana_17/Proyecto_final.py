@@ -44,123 +44,92 @@ def category_window():
     window.close()
 
 
-def save_expense(expense):
-    with open("expense.json", "w") as file:
-        json.dump(expense, file)
+def save_data(data):
+    with open("data.json", "w") as file:
+        json.dump(data, file)
 
 
-def load_expense():
+def load_data():
     try:
-        with open("expense.json", "r") as file:
+        with open("data.json", "r") as file:
             return json.load(file)
     except (FileNotFoundError, json.JSONDecodeError):
         return []
 
 
-def expense_window():
-    expense=load_expense()
-    categories=load_categories()
-    
+def transaction_window(transaction_type):
+    transaction_type = ["Expense", "Income"]
+    categories = load_categories()
     layout = [
-        [sg.Text("Expense Tracker")],
-        [sg.Text("Amount"), sg.Input(key="-EXPENSE-", size=(10, 1))],
-        [sg.Text("Category"), sg.Combo(categories, key="-CATEGORY_DROPDOWN-", size=(20, 5))],
-        [sg.Button("Add Expense"), sg.Button("Back")],
+        [sg.Text("transaction Tracker")],
+        [sg.Text("Type of Transaction"), sg.Combo(transaction_type, key="-TRANSACTION_TYPE-", size=(20, 3))],
+        [sg.Text("Description"), sg.Input(key="-DESCRIPTION-")],
+        [sg.Text("Category"), sg.Combo(categories, key="-CATEGORY-", size=(20, 3))],
+        [sg.Text("Amount"), sg.Input(key="-AMOUNT-")],
+        [sg.Button("Save"), sg.Button("Cancel")]
     ]
 
-    window = sg.Window("Expense Tracker", layout)
+    window = sg.Window("Transaction", layout)
+
+    while True:
+        event, values = window.read()
+
+        if event in (sg.WIN_CLOSED, "Cancel"):
+            break
+
+        elif event == "Save":
+            transaction_type = values["-TRANSACTION_TYPE-"]
+            category = values["-CATEGORY-"]
+            description = values["-DESCRIPTION-"]
+            amount = values["-AMOUNT-"]
+
+            if transaction_type and category and description and amount:
+                data = load_data()
+                data.append({"type": transaction_type, "category": category, "description": description, "amount": amount})
+                save_data(data)
+                sg.popup(f"{transaction_type} saved successfully")
+                break
+            else:
+                sg.popup("Please fill in all fields")
+
+        elif amount.isnumeric():
+            try:
+                amount = float(amount)
+                return True
+            except ValueError:
+                sg.popup("Please enter a valid number")
+                continue
+
+    window.close()
+
+
+def show_current_transactions():
+    data = load_data()
+    layout = [
+        [sg.Text("Current Transactions")],
+        [sg.Listbox(data, size=(100, 10), key="-TRANSACTION_LIST-")],
+        [sg.Button("Back")]
+    ]
+
+    window = sg.Window("Transactions", layout)
 
     while True:
         event, values = window.read()
 
         if event in (sg.WIN_CLOSED, "Back"):
-            save_expense(expense)
             break
-            
-
-        elif event == "Add Expense":
-            selected_category = values["-CATEGORY_DROPDOWN-"]
-            expense_amount = values["-EXPENSE-"]
-
-            if selected_category not in categories:
-                sg.popup_error("Category not found, please add it first") 
-                break
-
-            if selected_category and expense_amount:
-                sg.popup(f"Expense Added: ${expense_amount} to {selected_category}")
-
-            if expense_amount not in expense:
-                expense.append(expense_amount)
-                window["-EXPENSE-"].update(expense)
-
-            
 
     window.close()
-
-
-def save_income(income):
-    with open("income.json", "w") as file:
-        json.dump(income, file)
-
-
-def load_income():
-    try:
-        with open("income.json", "r") as file:
-            return json.load(file)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return []
-
-
-def income_window():
-    income=load_income()
-    categories=load_categories()
-    
-
-    layout = [
-        [sg.Text("Income Tracker")],
-        [sg.Text("Amount"), sg.Input(key="-INCOME-", size=(10, 1))],
-        [sg.Text("Category"), sg.Combo(categories, key="-CATEGORY_DROPDOWN-", size=(20, 5))],
-        [sg.Button("Add Income"), sg.Button("Back")],
-    ]
-
-    window = sg.Window("Income Tracker", layout)
-
-    while True:
-        event, values = window.read()
-
-        if event in (sg.WIN_CLOSED, "Back"):
-            save_income(income)
-            break
-            
-
-        elif event == "Add Income":
-            selected_category = values["-CATEGORY_DROPDOWN-"]
-            income_amount = values["-INCOME-"]
-
-            if selected_category not in categories:
-                sg.popup_error("Category not found, please add it first") 
-                break
-
-            if selected_category and income_amount:
-                sg.popup(f"Income Added: ${income_amount} to {selected_category}")
-
-            if income_amount not in income:
-                income.append(income_amount)
-                window["-INCOME-"].update(income)
-
-
-    window.close()
-
 
 def download_report():
-    categories = load_categories()
-    expenses = load_expense()
-    income = load_income()
+    transaction=load_data()
 
     with open("report.csv", "w", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow(["Category", "Expenses", "Income"])
-        writer.writerows(zip(categories, expenses, income)) 
+        writer.writerow(["Transaction tracker"])
+        writer.writerow(["Type", "Category", "Description", "Amount"])
+        for item in transaction:
+            writer.writerow([item["type"], item["category"], item["description"], item["amount"]])
         
     sg.popup("Report downloaded successfully")
 
@@ -199,9 +168,8 @@ def show_report():
 def main_menu():
     layout = [
         [sg.Text("Main Menu")],
-        [sg.Button("Manage Categories")],
-        [sg.Button("Add expense"), sg.Button("Add Income")],
-        [sg.Button("Show Report")],
+        [sg.Button("Manage Categories"), sg.Button("Add transaction")],
+        [sg.Button("Show transactions tracker"), sg.Button("Show Report")],
         [sg.Button("Exit")]
     ]
 
@@ -216,11 +184,11 @@ def main_menu():
         elif event == "Manage Categories":
             category_window() 
 
-        elif event == "Add expense":
-            expense_window()
-        
-        elif event == "Add Income":
-            income_window()
+        elif event == "Add transaction":
+            transaction_window("Expense")
+
+        elif event == "Show transactions tracker":
+            show_current_transactions()
 
         elif event == "Show Report":
             show_report()

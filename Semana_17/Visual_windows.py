@@ -1,27 +1,11 @@
 import FreeSimpleGUI as sg
-import json
-from CSV_data_manager import download_report, load_report
-
-class Categories:
-    FILE_NAME = "categories.json"
-
-    @staticmethod
-    def save(categories):
-        with open(Categories.FILE_NAME, "w") as file:
-            json.dump(categories, file)
-
-    @staticmethod
-    def load():
-        try:
-            with open(Categories.FILE_NAME, "r") as file:
-                return json.load(file)
-        except (FileNotFoundError, json.JSONDecodeError):
-            return []
-
+from Logic import Logic_transaction_manager, Logic_report
+from Data_manager import Save_categories_json, Save_transactions_json, Report
+class Categories_window:
 
     def __init__(self):
-        self.categories = Categories.load()
 
+        self.categories = Save_categories_json.load()
         self.layout = [
             [sg.Text("Category Manager")],
             [sg.Listbox(self.categories, size=(30, 5), key="-CATEGORY_LIST-", enable_events=True)],
@@ -31,11 +15,12 @@ class Categories:
         self.window = sg.Window("Categories", self.layout)
 
     def run(self):
+        from Data_manager import Save_categories_json
         while True:
             event, values = self.window.read()
 
             if event in (sg.WIN_CLOSED, "Save & Exit"):
-                Categories.save(self.categories)  
+                Save_categories_json.save(self.categories)  
                 break
 
             elif event == "Add Category":
@@ -48,47 +33,12 @@ class Categories:
         self.window.close()
 
 
-class Transaction_manager:
-
-    FILE_NAME = "Transaction.json"
-
-    @staticmethod
-    def save_transaction_data(data):
-        with open("Transaction.json", "w") as file:
-            json.dump(data, file)
-
-
-    @staticmethod
-    def load_transaction_data():
-        try:
-            with open("Transaction.json", "r") as file:
-                return json.load(file)
-        except (FileNotFoundError, json.JSONDecodeError):
-            return []
-        
-
-    @staticmethod
-    def positive_number(amount):
-        try:
-            amount= float(amount)
-            return amount >=0
-        except ValueError:
-            return False
-    
-    
-    @staticmethod
-    def description_not_empty(description):
-        try:
-            description != "" 
-            return description
-        except SyntaxError:
-            return False
-
+class Transaction_manager_window:
 
     def __init__(self):
-        self.categories = Categories.load()
+        self.categories = Save_categories_json.load()
         self.transaction_type= ["Expense", "Income"]
-        self.amount = Transaction_manager.positive_number
+        self.amount = Logic_transaction_manager.positive_number
         
 
         self.layout = [
@@ -115,18 +65,18 @@ class Transaction_manager:
                 description = values["-DESCRIPTION-"].strip()
                 amount = values["-AMOUNT-"].strip()
 
-                if not Transaction_manager.description_not_empty(description):
+                if not Logic_transaction_manager.description_not_empty(description):
                     sg.popup_error("The Description must be fill")
                     continue
 
-                if not Transaction_manager.positive_number(amount):
+                if not Logic_transaction_manager.positive_number(amount):
                     sg.popup_error("The Amount must be positive")
                     continue
 
                 if transaction_type and category and description and self.amount:
-                    data = Transaction_manager.load_transaction_data()
+                    data = Save_transactions_json.load_transaction_data()
                     data.append({"type": transaction_type, "category": category, "description": description, "amount": float(amount)})
-                    Transaction_manager.save_transaction_data(data)
+                    Save_transactions_json.save_transaction_data(data)
                     sg.popup(f"{transaction_type} saved successfully")
                     break
                 else:
@@ -137,12 +87,14 @@ class Transaction_manager:
 
 class Show_current_transactions:
     
+
     def __init__(self):
-        self.data= [list(transaction.values()) for transaction in Transaction_manager.load_transaction_data()]
+
+        self.data= [list(transaction.values()) for transaction in Save_transactions_json.load_transaction_data()]
         self.headings = ["Type", "Category", "Description","Amount"]
         self.layout = [
             [sg.Text("Current Transactions")],
-            [sg.Table(values=self.data, headings= self.headings,auto_size_columns= False, justification= "Center" , enable_events= True,num_rows= 10, key="-TRANSACTION_LIST-", )],
+            [sg.Table(values=self.data, headings= self.headings,auto_size_columns= True, justification= "Center" , enable_events= True,num_rows= 10, key="-TRANSACTION_LIST-", )],
             [sg.Button("Back")]
         ]
 
@@ -160,9 +112,8 @@ class Show_current_transactions:
 
 
 class Show_report:
-    
+
     def __init__(self):
-        
         self.layout = [
             [sg.Text("Report")],
             [sg.Button("Download Report"), sg.Button("Load Report")],
@@ -180,9 +131,9 @@ class Show_report:
                 break
 
             elif event == "Download Report":
-                download_report()
+                Report.download_report()
 
             elif event == "Load Report":
-                load_report()
+                Report.load_report()
 
         self.window.close()

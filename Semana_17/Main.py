@@ -1,6 +1,5 @@
 import FreeSimpleGUI as sg
-import csv
-from Visual_windows import Categories, Transaction_manager, Show_current_transactions, Show_report
+from Visual_windows import Categories_window, Transaction_manager_window, Show_current_transactions, Show_report
 
 def main_menu():
     layout = [
@@ -19,11 +18,11 @@ def main_menu():
             break
 
         elif event == "Manage Categories":
-            category_manager = Categories()
+            category_manager = Categories_window()
             category_manager.run()
 
         elif event == "Add transaction":
-            transaction_manager= Transaction_manager()
+            transaction_manager= Transaction_manager_window()
             transaction_manager.run()
 
         elif event == "Show transactions tracker":

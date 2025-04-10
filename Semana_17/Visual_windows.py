@@ -1,5 +1,5 @@
 import FreeSimpleGUI as sg
-from Logic import Logic_transaction_manager, Logic_report
+from Logic import Transaction, Category
 from Data_manager import Save_categories_json, Save_transactions_json, Report
 class Categories_window:
 
@@ -8,8 +8,8 @@ class Categories_window:
         self.categories = Save_categories_json.load()
         self.layout = [
             [sg.Text("Category Manager")],
-            [sg.Listbox(self.categories, size=(30, 5), key="-CATEGORY_LIST-", enable_events=True)],
-            [sg.Input(key="-NEW_CATEGORY-"), sg.Button("Add Category")],
+            [sg.Listbox(self.categories, size=(30, 5), key=Category().category, enable_events=True)],
+            [sg.Input(key= Category().new_category), sg.Button("Add Category")],
             [sg.Button("Save & Exit")]
         ]
         self.window = sg.Window("Categories", self.layout)
@@ -24,11 +24,9 @@ class Categories_window:
                 break
 
             elif event == "Add Category":
-                new_category = values["-NEW_CATEGORY-"].strip()
+                category_instance = Category()
+                category_instance.add_new_category(values, self.categories, self.window)
 
-                if new_category and new_category not in self.categories:
-                    self.categories.append(new_category)
-                    self.window["-CATEGORY_LIST-"].update(self.categories)
 
         self.window.close()
 
@@ -37,16 +35,13 @@ class Transaction_manager_window:
 
     def __init__(self):
         self.categories = Save_categories_json.load()
-        self.transaction_type= ["Expense", "Income"]
-        self.amount = Logic_transaction_manager.positive_number
-        
-
+        self.transaction_type= Transaction().transaction_type
         self.layout = [
             [sg.Text("transaction Tracker")],
-            [sg.Text("Type of Transaction"), sg.Combo(self.transaction_type, key="-TRANSACTION_TYPE-", size=(20, 3))],
-            [sg.Text("Description"), sg.Input(key="-DESCRIPTION-")],
+            [sg.Text("Type of Transaction"), sg.Combo(self.transaction_type, key= Transaction().type, size=(20, 3))],
+            [sg.Text("Description"), sg.Input(key=Transaction().description)],
             [sg.Text("Category"), sg.Combo(self.categories, key="-CATEGORY-", size=(20, 3))],
-            [sg.Text("Amount"), sg.Input(key="-AMOUNT-")],
+            [sg.Text("Amount"), sg.Input(key=Transaction().amount)],
             [sg.Button("Save"), sg.Button("Cancel")]
         ]
         self.window = sg.Window("Transaction", self.layout)
@@ -60,23 +55,21 @@ class Transaction_manager_window:
                 break
 
             elif event == "Save":
-                transaction_type = values["-TRANSACTION_TYPE-"]
+                transaction_type = values[Transaction().type]
                 category = values["-CATEGORY-"]
-                description = values["-DESCRIPTION-"].strip()
-                amount = values["-AMOUNT-"].strip()
+                description = values[Transaction().description].strip()
+                amount = values[Transaction().amount].strip()
 
-                if not Logic_transaction_manager.description_not_empty(description):
+                if not Transaction.description_not_empty(description):
                     sg.popup_error("The Description must be fill")
                     continue
 
-                if not Logic_transaction_manager.positive_number(amount):
+                if not Transaction.positive_number(amount):
                     sg.popup_error("The Amount must be positive")
                     continue
 
-                if transaction_type and category and description and self.amount:
-                    data = Save_transactions_json.load_transaction_data()
-                    data.append({"type": transaction_type, "category": category, "description": description, "amount": float(amount)})
-                    Save_transactions_json.save_transaction_data(data)
+                if transaction_type and category and description and amount:
+                    Transaction.update_transaction(transaction_type, category, description, amount)
                     sg.popup(f"{transaction_type} saved successfully")
                     break
                 else:

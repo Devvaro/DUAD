@@ -40,7 +40,7 @@ class Transaction_manager_window:
             [sg.Text("transaction Tracker")],
             [sg.Text("Type of Transaction"), sg.Combo(self.transaction_type, key= Transaction().type, size=(20, 3))],
             [sg.Text("Description"), sg.Input(key=Transaction().description)],
-            [sg.Text("Category"), sg.Combo(self.categories, key="-CATEGORY-", size=(20, 3))],
+            [sg.Text("Category"), sg.Combo(self.categories, key=Category().category, size=(20, 3))],
             [sg.Text("Amount"), sg.Input(key=Transaction().amount)],
             [sg.Button("Save"), sg.Button("Cancel")]
         ]
@@ -56,7 +56,7 @@ class Transaction_manager_window:
 
             elif event == "Save":
                 transaction_type = values[Transaction().type]
-                category = values["-CATEGORY-"]
+                category = values[Category().category]
                 description = values[Transaction().description].strip()
                 amount = values[Transaction().amount].strip()
 

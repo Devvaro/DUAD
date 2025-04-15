@@ -8,8 +8,8 @@ class Categories_window:
         self.categories = Save_categories_json.load()
         self.layout = [
             [sg.Text("Category Manager")],
-            [sg.Listbox(self.categories, size=(30, 5), key=Category().category, enable_events=True)],
-            [sg.Input(key= Category().new_category), sg.Button("Add Category")],
+            [sg.Listbox(self.categories, size=(30, 5), key="-CATEGORY-", enable_events=True)],
+            [sg.Input(key= "-NEW_CATEGORY-"), sg.Button("Add Category")],
             [sg.Button("Save & Exit")]
         ]
         self.window = sg.Window("Categories", self.layout)
@@ -24,8 +24,15 @@ class Categories_window:
                 break
 
             elif event == "Add Category":
-                category_instance = Category()
-                category_instance.add_new_category(values, self.categories, self.window)
+                new_category = values["-NEW_CATEGORY-"].strip()
+                category_instance = Category(new_category)
+
+                if category_instance.is_valid(self.categories):
+                    self.categories.append(new_category)
+                    self.window["-CATEGORY-"].update(self.categories)
+                    
+                else:
+                    sg.popup_error("Invalid category name or already exists")
 
 
         self.window.close()
@@ -35,13 +42,13 @@ class Transaction_manager_window:
 
     def __init__(self):
         self.categories = Save_categories_json.load()
-        self.transaction_type= Transaction().transaction_type
+        self.transaction_type= ["Income", "Expense"]
         self.layout = [
             [sg.Text("transaction Tracker")],
-            [sg.Text("Type of Transaction"), sg.Combo(self.transaction_type, key= Transaction().type, size=(20, 3))],
-            [sg.Text("Description"), sg.Input(key=Transaction().description)],
-            [sg.Text("Category"), sg.Combo(self.categories, key=Category().category, size=(20, 3))],
-            [sg.Text("Amount"), sg.Input(key=Transaction().amount)],
+            [sg.Text("Type of Transaction"), sg.Combo(self.transaction_type, key= "-TRANSACTION_TYPE-", size=(20, 3))],
+            [sg.Text("Description"), sg.Input(key="-DESCRIPTION-")],
+            [sg.Text("Category"), sg.Combo(self.categories, key="-CATEGORY-", size=(20, 3))],
+            [sg.Text("Amount"), sg.Input(key="-AMOUNT-")],
             [sg.Button("Save"), sg.Button("Cancel")]
         ]
         self.window = sg.Window("Transaction", self.layout)
@@ -55,25 +62,21 @@ class Transaction_manager_window:
                 break
 
             elif event == "Save":
-                transaction_type = values[Transaction().type]
-                category = values[Category().category]
-                description = values[Transaction().description].strip()
-                amount = values[Transaction().amount].strip()
+                transaction= Transaction(
+                    values["-TRANSACTION_TYPE-"],
+                    values["-CATEGORY-"],
+                    values["-DESCRIPTION-"],
+                    values["-AMOUNT-"]
+                )
 
-                if not Transaction.description_not_empty(description):
-                    sg.popup_error("The Description must be fill")
-                    continue
-
-                if not Transaction.positive_number(amount):
-                    sg.popup_error("The Amount must be positive")
-                    continue
-
-                if transaction_type and category and description and amount:
-                    Transaction.update_transaction(transaction_type, category, description, amount)
-                    sg.popup(f"{transaction_type} saved successfully")
+                if transaction.is_valid():
+                    data= Save_transactions_json.load_transaction_data()
+                    data.append(transaction.to_dict())
+                    Save_transactions_json.save_transaction_data(data)
+                    sg.popup(f"{transaction.transaction_type} saved successfully")
                     break
                 else:
-                    sg.popup("Please fill in all fields")
+                    sg.popup_error("Please fill in all fields correctly (Amount must be a positive number)")
 
         self.window.close()
 

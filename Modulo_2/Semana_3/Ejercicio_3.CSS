@@ -1,0 +1,81 @@
+body {
+font-family: 'Inter', sans-serif;
+background-color: #f9f9f9;
+margin: 0;
+padding: 0;
+}
+
+.chart-container {
+max-width: 900px;
+margin: 40px auto;
+padding: 0 20px;
+}
+
+h1 {
+font-size: 32px;
+font-weight: 800;
+margin-bottom: 30px;
+text-align: center;
+}
+
+.chart-row {
+display: flex;
+align-items: center;
+justify-content: space-between;
+background-color: white;
+border-top: 1px solid #ddd;
+padding: 20px 15px;
+}
+
+.rank {
+background-color: black;
+color: white;
+font-weight: bold;
+font-size: 20px;
+width: 40px;
+height: 40px;
+display: flex;
+align-items: center; 
+justify-content: center; 
+border-radius: 4px;
+}
+
+
+.song-info {
+flex: 1;
+padding-left: 20px;
+}
+
+.images {
+width: 20%;
+border-radius: 8px;
+margin: 30px;
+}
+
+.song-title {
+font-weight: 600;
+font-size: 18px;
+color: #000;
+}
+
+.artist {
+font-size: 14px;
+color: #666;
+}
+
+.stats {
+display: flex;
+gap: 25px;
+text-align: right;
+}
+
+.stats div {
+display: flex;
+flex-direction: column;
+font-size: 14px;
+}
+
+.label {
+font-size: 12px;
+color: #888;
+}

@@ -2,128 +2,77 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Hot 100 - Billboard Clone</title>
-<link rel="stylesheet" href="Ejercicio_3.CSS" />
+<title>Billboard Hot 100</title>
+<link rel="stylesheet" href="Ejercicio_3.css" />
 </head>
 <body>
-<main class="chart-container">
-<h1>Billboard Hot 100</h1>
+<header>
+<header class="top-header">
+<h1 class="main-title">Billboard Hot 100™</h1>
+<span class="date">Week of July 26, 2025</span>
+</header>
 
-<div class="chart-row">
-    <div class="rank">2</div>
-    <img class="images" src="Imagenes/descarga.jpeg" alt="Disk photo" />
-    <div class="song-info">
-    <div class="song-title">song-1</div>
-    <div class="artist">fake name</div>
-    </div>
-    <div class="stats">
-    <div>
-        <span class="label">Last Week</span>
-        <span>3</span>
-    </div>
-    <div>
-        <span class="label">Peak Pos.</span>
-        <span>2</span>
-    </div>
-    <div>
-        <span class="label">Wks on Chart</span>
-        <span>10</span>
-    </div>
-    </div>
-</div>
-
-<div class="chart-row">
-    <div class="rank">3</div>
-    <img class="images" src="Imagenes/descarga.jpeg" alt="Disk photo" />
-    <div class="song-info">
-    <div class="song-title">Song-2</div>
-    <div class="artist">Band Name</div>
-    </div>
-    <div class="stats">
-    <div>
-        <span class="label">Last Week</span>
-        <span>1</span>
-    </div>
-    <div>
-        <span class="label">Peak Pos.</span>
-        <span>1</span>
-    </div>
-    <div>
-        <span class="label">Wks on Chart</span>
-        <span>15</span>
-    </div>
-    </div>
-</div>
-
-<div class="chart-row">
-    <div class="rank">3</div>
-    <img class="images" src="Imagenes/descarga.jpeg" alt="Disk photo" />
-    <div class="song-info">
-    <div class="song-title">Song-3</div>
-    <div class="artist">Band Name</div>
-    </div>
-    <div class="stats">
-    <div>
-        <span class="label">Last Week</span>
-        <span>8</span>
-    </div>
-    <div>
-        <span class="label">Peak Pos.</span>
-        <span>1</span>
-    </div>
-    <div>
-        <span class="label">Wks on Chart</span>
-        <span>15</span>
-    </div>
-    </div>
-</div>
-
-<div class="chart-row">
-    <div class="rank">4</div>
-    <img class="images" src="Imagenes/descarga.jpeg" alt="Disk photo" />
-    <div class="song-info">
-    <div class="song-title">Song-4</div>
-    <div class="artist">Band Name</div>
-    </div>
-    <div class="stats">
-    <div>
-        <span class="label">Last Week</span>
-        <span>19</span>
-    </div>
-    <div>
-        <span class="label">Peak Pos.</span>
-        <span>1</span>
-    </div>
-    <div>
-        <span class="label">Wks on Chart</span>
-        <span>14</span>
-    </div>
-    </div>
-</div>
-
-<div class="chart-row">
-    <div class="rank">5</div>
-    <img class="images" src="Imagenes/descarga.jpeg" alt="Disk photo" />
-    <div class="song-info">
-    <div class="song-title">Song-5</div>
-    <div class="artist">Band Name</div>
-    </div>
-    <div class="stats">
-    <div>
-        <span class="label">Last Week</span>
-        <span>35</span>
-    </div>
-    <div>
-        <span class="label">Peak Pos.</span>
-        <span>1</span>
-    </div>
-    <div>
-        <span class="label">Wks on Chart</span>
-        <span>5</span>
-    </div>
-    </div>
-</div>
-
+<main class="table-container">
+<table>
+    <thead>
+    <tr>
+        <th>This Week</th>
+        <th>Cover</th>
+        <th>Title</th>
+        <th>Artist</th>
+        <th>Last Week</th>
+        <th>Peak Pos.</th>
+        <th>Wks on Chart</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><span class="rank-box">2</span></td>
+        <td><img src="Imagenes/descarga.jpeg" alt="Cover 1"></td>
+        <td>Song-1</td>
+        <td>Fake Name</td>
+        <td>3</td>
+        <td>2</td>
+        <td>10</td>
+    </tr>
+    <tr>
+        <td><span class="rank-box">3</span></td>
+        <td><img src="Imagenes/descarga.jpeg" alt="Cover 2"></td>
+        <td>Song-2</td>
+        <td>Band Name</td>
+        <td>1</td>
+        <td>1</td>
+        <td>15</td>
+    </tr>
+    <tr>
+        <td><span class="rank-box">3</span></td>
+        <td><img src="Imagenes/descarga.jpeg" alt="Cover 3"></td>
+        <td>Song-3</td>
+        <td>Band Name</td>
+        <td>8</td>
+        <td>1</td>
+        <td>15</td>
+    </tr>
+    <tr>
+        <td><span class="rank-box">4</span></td>
+        <td><img src="Imagenes/descarga.jpeg" alt="Cover 4"></td>
+        <td>Song-4</td>
+        <td>Band Name</td>
+        <td>19</td>
+        <td>1</td>
+        <td>14</td>
+    </tr>
+    <tr>
+        <td><span class="rank-box">5</span></td>
+        <td><img src="Imagenes/descarga.jpeg" alt="Cover 5"></td>
+        <td>Song-5</td>
+        <td>Band Name</td>
+        <td>35</td>
+        <td>1</td>
+        <td>5</td>
+    </tr>
+    </tbody>
+</table>
 </main>
 </body>
 </html>

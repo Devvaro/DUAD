@@ -1,0 +1,107 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f3f3f3;
+    margin: 0;
+    padding: 0;
+}
+
+.billboard-header {
+    background-color: white;
+    padding: 20px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.billboard-header h1 {
+    font-size: 40px;
+    margin: 0;
+}
+
+.week-date {
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+    display: inline-block;
+    color: black;
+    padding: 5px 10px;
+    font-size: 14px;
+    margin-top: 5px;
+
+}
+
+main {
+    padding: 20px;
+}
+
+.song-card {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 1px 3px rgba(0,0,0,0.1);
+}
+
+.rank {
+    align-items: center;
+    border-bottom-style: solid;
+    border-bottom-width: 0px;
+    border-left-style: solid;
+    border-left-width: 0px;
+    border-right-style: solid;
+    border-right-width: 0px;
+    border-top-style: solid;
+    border-top-width: 0px;
+    box-sizing: border-box;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 33.008px;
+    font-weight: 800;
+    height: 33px;
+    line-height: 33px;
+    list-style-type: none;
+    text-align: center;
+    width: 75px;
+}
+
+.rank-1 .rank {
+    background-color: rgb(0, 255, 154);
+    color: black;
+}
+
+
+.song-card img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+}
+
+.song-info {
+    flex-grow: 1;
+    padding: 0 15px;
+}
+
+.song-info h2 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.song-info p {
+    font-size: 14px;
+    color: gray;
+    margin: 0;
+}
+
+.song-stats {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 10px 15px;
+    font-size: 12px;
+    color: gray;
+}
